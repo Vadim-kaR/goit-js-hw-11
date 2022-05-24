@@ -30,6 +30,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  font-size: 12px;
 }
 
 .info {
@@ -72,4 +73,5 @@ a {
 
 p {
   display: inline-block;
+  margin: 5px 5px;
 }

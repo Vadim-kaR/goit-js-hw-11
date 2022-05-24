@@ -15,9 +15,12 @@ axios.defaults.baseURL = 'https://pixabay.com/api/?'
 
 let totalHits = 0;
 let totalPageAmount = 0;
+let instance = null;
+
 
  function renderCards(card) { 
-    refs.listBox.insertAdjacentHTML('beforeend', cardTpl(card))
+     refs.listBox.insertAdjacentHTML('beforeend', cardTpl(card))
+      lightbox = new SimpleLightbox('.gallery a');
 }
 
 function checkEmptyResponse (data) { 
@@ -69,10 +72,12 @@ const callback = entries => {
                 Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
                 return
             }
+            
             params.page += 1;
             const { data } = await getInfo();
             renderCards(data.hits);
             smoothScroll()
+            lightbox.refresh()
         }
     })
 }
@@ -81,9 +86,3 @@ const observer = new IntersectionObserver(callback, options)
 
 observer.observe(document.querySelector('#spyBox'));
 
-
-
-// let gallery = new SimpleLightbox('.gallery a');
-// gallery.on('show.simplelightbox', function () {
-// 	// do something…
-// });
