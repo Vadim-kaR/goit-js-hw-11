@@ -1,3 +1,5 @@
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 import './sass/main.scss';
 import axios from 'axios';
 import Notiflix from 'notiflix';
@@ -5,9 +7,34 @@ import cardTpl from './tamplates/List-item.hbs'
 import params from './js/getParams.js'
 import getInfo from './js/getCardsInfo.js'
 import refs from './js/refs.js'
+import smoothScroll from './js/smoothScroll.js'
+
 
 
 axios.defaults.baseURL = 'https://pixabay.com/api/?'
+
+let totalHits = 0;
+let totalPageAmount = 0;
+
+ function renderCards(card) { 
+    refs.listBox.insertAdjacentHTML('beforeend', cardTpl(card))
+}
+
+function checkEmptyResponse (data) { 
+    if ((data.hits).length === 0) { 
+         Notiflix.Notify.info('Sorry, there are no images matching your search query. Please try again.');
+        return
+    }
+}
+
+function resetPage() { 
+    params.page = 1;
+    refs.listBox.innerHTML = '';
+}
+
+function viewTotalHitsAmount() { 
+    Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+}
 
  async function onSearchSubmitBtn(e) {
      e.preventDefault();
@@ -19,35 +46,44 @@ axios.defaults.baseURL = 'https://pixabay.com/api/?'
      }
      params.q = searchQuery;
      const { data } = await getInfo();
-     emptyResponseCheker(data);
+     checkEmptyResponse(data);
      resetPage();
-    renderCards(data.hits)
+     totalHits = data.totalHits;
+     totalPageAmount = totalHits / params.per_page
+     renderCards(data.hits);
+     viewTotalHitsAmount();
 }
 
 refs.searchForm.addEventListener('submit', onSearchSubmitBtn)
 
+const options = {
+    rootMargin: '200px'
+}
+ 
+const callback = entries => {
+    entries.forEach(async entry => {
 
- function renderCards(data) { 
-    refs.listBox.insertAdjacentHTML('beforeend', cardTpl(data))
+        if (entry.isIntersecting && params.q !== '') { 
+
+            if (params.page > totalPageAmount) { 
+                Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+                return
+            }
+            params.page += 1;
+            const { data } = await getInfo();
+            renderCards(data.hits);
+            smoothScroll()
+        }
+    })
 }
 
-async function onLoadMoreBtnClick() { 
-    params.page += 1;
-    const { data } = await getInfo();
-    renderCards(data.hits)   
-}
+const observer = new IntersectionObserver(callback, options)
 
-refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick)
+observer.observe(document.querySelector('#spyBox'));
 
 
-function emptyResponseCheker (data) { 
-    if ((data.hits).length === 0) { 
-         Notiflix.Notify.info('Sorry, there are no images matching your search query. Please try again.');
-        return
-    }
-}
 
-function resetPage() { 
-    params.page = 1;
-    refs.listBox.innerHTML = '';
-}
+// let gallery = new SimpleLightbox('.gallery a');
+// gallery.on('show.simplelightbox', function () {
+// 	// do something…
+// });

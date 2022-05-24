@@ -34,6 +34,7 @@
 
 .info {
 display: flex;
+justify-content: space-around;
 }
 
 .info-item{
@@ -59,12 +60,16 @@ width: 250px;
   box-shadow: 3px 4px 12px -1px rgba(0, 0, 0, 0.63);
 }
 
-.moreCards {
-  margin: 0 auto;
-  width: 100px;
-  padding: 40px;
+
+.photo {
+  width: 100%;
 }
 
-.load-more {
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
+p {
+  display: inline-block;
 }
