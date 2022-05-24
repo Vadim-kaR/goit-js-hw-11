@@ -47,13 +47,17 @@ justify-content: space-around;
 
 .search-form {
   margin: 0 auto;
-  width: 250px;
+  width: 100%;
   padding: 20px 0;
+  background-color: #002896;
+  text-align: center;
 }
 
 .photo-card{
 padding: 10px;
 width: 250px;
+transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
 
 }
 
@@ -61,10 +65,6 @@ width: 250px;
   box-shadow: 3px 4px 12px -1px rgba(0, 0, 0, 0.63);
 }
 
-
-.photo {
-  width: 100%;
-}
 
 a {
   text-decoration: none;
@@ -74,4 +74,24 @@ a {
 p {
   display: inline-block;
   margin: 5px 5px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.form-input {
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  padding: 5px;
+  margin-right: 15px;
+}
+
+.seach-button {
+  border-radius: 5px;
+  width: 80px;
+  padding: 5px;
+  // background-color: #fff;
 }

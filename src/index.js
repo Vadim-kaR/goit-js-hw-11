@@ -20,7 +20,7 @@ let instance = null;
 
  function renderCards(card) { 
      refs.listBox.insertAdjacentHTML('beforeend', cardTpl(card))
-      lightbox = new SimpleLightbox('.gallery a');
+      instance = new SimpleLightbox('.gallery a');
 }
 
 function checkEmptyResponse (data) { 
@@ -75,9 +75,10 @@ const callback = entries => {
             
             params.page += 1;
             const { data } = await getInfo();
+            instance.refresh()
             renderCards(data.hits);
             smoothScroll()
-            lightbox.refresh()
+            
         }
     })
 }
