@@ -1,22 +1,15 @@
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import './sass/main.scss';
-import axios from 'axios';
+import './css/styles.css';
 import Notiflix from 'notiflix';
 import cardTpl from './tamplates/List-item.hbs'
-import params from './js/getParams.js'
-import getInfo from './js/getCardsInfo.js'
+import { params, getImages } from './js/getImages.js'
 import refs from './js/refs.js'
 import smoothScroll from './js/smoothScroll.js'
-
-
-
-axios.defaults.baseURL = 'https://pixabay.com/api/?'
 
 let totalHits = 0;
 let totalPageAmount = 0;
 let instance = null;
-
 
  function renderCards(card) { 
      refs.listBox.insertAdjacentHTML('beforeend', cardTpl(card))
@@ -48,11 +41,11 @@ function viewTotalHitsAmount() {
         return;
      }
      params.q = searchQuery;
-     const { data } = await getInfo();
+     const { data } = await getImages();
      checkEmptyResponse(data);
      resetPage();
      totalHits = data.totalHits;
-     totalPageAmount = totalHits / params.per_page
+     totalPageAmount = totalHits / params.per_page;
      renderCards(data.hits);
      viewTotalHitsAmount();
 }
@@ -74,7 +67,7 @@ const callback = entries => {
             }
             
             params.page += 1;
-            const { data } = await getInfo();
+            const { data } = await getImages();
             instance.refresh()
             renderCards(data.hits);
             smoothScroll()
