@@ -28,8 +28,8 @@ function resetPage() {
     refs.listBox.innerHTML = '';
 }
 
-function viewTotalHitsAmount() { 
-    Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+function viewTotalHitsAmount(totalPage) { 
+    Notiflix.Notify.info(`Hooray! We found ${totalPage} images.`);
 }
 
  async function onSearchSubmitBtn(e) {
@@ -47,7 +47,7 @@ function viewTotalHitsAmount() {
      totalHits = data.totalHits;
      totalPageAmount = totalHits / params.per_page;
      renderCards(data.hits);
-     viewTotalHitsAmount();
+     viewTotalHitsAmount(data.total);
 }
 
 refs.searchForm.addEventListener('submit', onSearchSubmitBtn)
